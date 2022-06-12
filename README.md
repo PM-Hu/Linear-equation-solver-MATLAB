@@ -1,15 +1,8 @@
-# Aha
-This repository is intended to store some classic algorithms to solve linear equations of the form:
-$$
-\mathbf{A}x = b
-$$
-The updating is in progress but may not frequently, may the force be with me.
+# Linear-equation-solver-MATLAB
+Some algorithms to solve Linear equations in MATLAB, such as Jacobi, Guass-Seidel, and so on.
 
-# Algorithms
+the [**mex**] function file to be added: GuassSeidel.cpp
 
-- Gauss Seidel
+Gauss Seidel mex version has been updated, but inefficient
 
-- Gauss Seidel mex version, but inefficient
-
-  some descriptions here ....
-
+updating...
