@@ -15,7 +15,7 @@
 void serial_sweep(
     mwIndex *cols, mwIndex *rows, double *entries, double *rhs, double *x, mwSize ncols)
 {
-    std::vector<double> x_old(ncols, 0.0); // 初始值
+    std::vector<double> x_old(ncols, 0.0); //
 
     #pragma omp parallel for
     for (ptrdiff_t ix = 0; ix < ncols; ix++)
