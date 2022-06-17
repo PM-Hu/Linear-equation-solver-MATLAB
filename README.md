@@ -3,7 +3,9 @@ Some algorithms to solve Linear equations in MATLAB, such as Jacobi, Guass-Seide
 
 the [**mex**] function files are added: GuassSeidel.cpp,  GuassSeidelC.cpp
 
-- **GuassSeidel.cpp** uses the MATLAB® Data API to read and write MATLAB data from C++ programs, but inefficient.
-- **GuassSeidelC.cpp** uses `mxArray` to read and write MATLAB® data from C programs, highly efficient.
+- **mexGuassSeidel.cpp** uses the MATLAB® Data API to read and write MATLAB data from C++ programs, but inefficient.
+- **mexGuassSeidelC.cpp** uses `mxArray` to read and write MATLAB® data from C programs, highly efficient.
+
+- **mexRBGaussSeidelCP.cpp**, the red-black Gauss-Seidel, suitable for **parallel computation**.
 
 updating...
