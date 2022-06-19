@@ -6,13 +6,18 @@
  * x = mexGaussSeidelC(transpose(A),b,x); % one iteration
  *
  * message: this version(0.029s) is faster than mexGaussSeidel(6.5s) and mldivid(0.05s)
+ * 
+ * 22-6-19 update: create a std::vector<double> container to sotre the input and output solution,
+ * fixed an unexplainable error in matlab that leads pcg to fail to converge. (the solution x in
+ * matlab programm cannot be assigned)
  */
 
 #include "mex.h"
 #include "matrix.h"
+#include <vector>
 
 void serial_sweep_forward(
-    mwIndex *cols, mwIndex *rows, double *entries, double *rhs, double *x, mwSize ncols)
+    mwIndex *cols, mwIndex *rows, double *entries, double *rhs, std::vector<double> &x, mwSize ncols)
 {
 
     for (ptrdiff_t i = 0; i != ncols; i += 1)
@@ -62,9 +67,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     rows    = mxGetIr(prhs[0]);
     entries = mxGetPr(prhs[0]);
 
-    // We use the tuple of CRS arrays to represent the system matrix.
-    // Note that std::tie creates a tuple of references, so no data is actually
-    // copied here:
     /*
      * CSR - compressed sparse row  or CRS - compressed row storage
      * A   = [1 0 0;
@@ -80,11 +82,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     rhs    = mxGetPr(prhs[1]);
     solu   = mxGetPr(prhs[2]);
+    std::vector<double> solx(n, 0.0);  // a container
 
-    serial_sweep_forward(cols, rows, entries, rhs, solu, n);
+    #pragma omp parallel for
+    for(int ix=0; ix < n; ix++){
+        solx[ix] = solu[ix];
+    }
 
+    serial_sweep_forward(cols, rows, entries, rhs, solx, n);
+
+    #pragma omp parallel for
     for(ptrdiff_t ix=0; ix < m; ix++){
-        result[ix] = solu[ix];
+        result[ix] = solx[ix];
     }
     return;
 }
